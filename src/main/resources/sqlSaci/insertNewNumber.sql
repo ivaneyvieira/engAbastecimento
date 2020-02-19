@@ -1,0 +1,1 @@
+INSERT IGNORE INTO lastno(storeno, no, dupse, se, padbyte) VALUE (mid(:no, 1, 1) * 1, :no, 0, 'RS', '')
