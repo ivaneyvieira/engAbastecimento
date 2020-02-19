@@ -22,15 +22,15 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     config.isAutoCommit = false
     val ds = HikariDataSource(config)
     ds.maximumPoolSize = 5
-    
-    this.sql2o = Sql2o(ds)
+  
+    this.sql2o = Sql2o(url, username, password)
   }
   
   private fun registerDriver(driver: String) {
     try {
       Class.forName(driver)
     } catch(e: ClassNotFoundException) {
-      throw RuntimeException(e)
+      //throw RuntimeException(e)
     }
   }
   

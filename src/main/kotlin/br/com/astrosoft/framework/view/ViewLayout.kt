@@ -1,11 +1,11 @@
 package br.com.astrosoft.framework.view
 
+import br.com.astrosoft.abastecimento.model.beans.UserSaci
+import br.com.astrosoft.abastecimento.model.saci
+import br.com.astrosoft.abastecimento.view.LoginService
 import br.com.astrosoft.framework.model.RegistryUserInfo
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
-import br.com.astrosoft.separacao.model.beans.UserSaci
-import br.com.astrosoft.separacao.model.saci
-import br.com.astrosoft.separacao.view.LoginService
 import com.github.mvysny.karibudsl.v10.KFormLayout
 import com.github.mvysny.karibudsl.v10.em
 import com.github.mvysny.karibudsl.v10.formLayout

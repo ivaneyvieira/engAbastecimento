@@ -1,4 +1,4 @@
-package br.com.astrosoft.separacao.view
+package br.com.astrosoft.abastecimento.view
 
 import br.com.astrosoft.framework.model.RegistryUserInfo
 import com.github.appreciated.app.layout.behaviour.AppLayout
@@ -16,13 +16,9 @@ import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.html.Hr
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.icon.VaadinIcon.CLOSE_CIRCLE
-import com.vaadin.flow.component.icon.VaadinIcon.COPY
 import com.vaadin.flow.component.icon.VaadinIcon.EDIT
-import com.vaadin.flow.component.icon.VaadinIcon.ERASER
-import com.vaadin.flow.component.icon.VaadinIcon.SPLIT
 import com.vaadin.flow.component.icon.VaadinIcon.USER
 import com.vaadin.flow.component.page.Push
-import com.vaadin.flow.router.PreserveOnRefresh
 import com.vaadin.flow.server.PWA
 import com.vaadin.flow.theme.Theme
 import com.vaadin.flow.theme.lumo.Lumo
@@ -30,30 +26,15 @@ import kotlin.reflect.KClass
 
 @Theme(value = Lumo::class, variant = Lumo.DARK)
 @Push
-@PWA(name = "Separação para ressuprimento",
-     shortName = "Separação",
+@PWA(name = "Abastecimento de loja",
+     shortName = "Abastecimento",
      iconPath = "icons/logo.png")
-@PreserveOnRefresh
 class SeparacaoLayout: AppLayoutRouterLayout() {
   init {
-    /*  val usuario = saci.findUser(SessionUitl.loginInfo?.usuario)
-      if(usuario == null)
-        navigateToView(LoginView::class)
-      else*/
     init(atualizaMenu())
   }
   
   private fun atualizaMenu(): AppLayout? {
-    /*
-     val appMenu = headerMenu(RegistryUserInfo.commpany, "Versão ${RegistryUserInfo.version}")
-       .addMenu("Duplicar", COPY, DuplicarView::class, usuario?.duplicar)
-       .addMenu("Separar", SPLIT, SepararView::class, usuario?.separar)
-       .addMenu("Editar", EDIT, EditarView::class, usuario?.editar)
-       .addMenu("Remover", ERASER, RemoverView::class, usuario?.remover)
-       .addMenu("Usuários", USER, UsuarioView::class, usuario?.admin)
-       .build()
-       
-     */
     val appMenu = appMenu()
     return appLayout(RegistryUserInfo.appName, appMenu)
   }
@@ -72,10 +53,7 @@ class SeparacaoLayout: AppLayoutRouterLayout() {
   companion object {
     private var menuComponent: Component? = null
     private var menuUsuario: LeftNavigationItem? = null
-    private var menuRemover: LeftNavigationItem? = null
     private var menuEditar: LeftNavigationItem? = null
-    private var menuSeparar: LeftNavigationItem? = null
-    private var menuDuplicar: LeftNavigationItem? = null
   
     fun updateLayout() {
       menuComponent?.children?.forEach {component ->
@@ -96,15 +74,9 @@ class SeparacaoLayout: AppLayoutRouterLayout() {
     
     fun appMenu(): Component {
       val appMenu = headerMenu(RegistryUserInfo.commpany, "Versão ${RegistryUserInfo.version}")
-      menuDuplicar = addMenu("Duplicar", COPY, DuplicarView::class)
-      menuSeparar = addMenu("Separar", SPLIT, SepararView::class)
       menuEditar = addMenu("Editar", EDIT, EditarView::class)
-      menuRemover = addMenu("Remover", ERASER, RemoverView::class)
       menuUsuario = addMenu("Usuários", USER, UsuarioView::class)
-      appMenu.add(menuDuplicar)
-      appMenu.add(menuSeparar)
       appMenu.add(menuEditar)
-      appMenu.add(menuRemover)
       appMenu.add(menuUsuario)
       menuComponent = appMenu.build()
       return menuComponent!!

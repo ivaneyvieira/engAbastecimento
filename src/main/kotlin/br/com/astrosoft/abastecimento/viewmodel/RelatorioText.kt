@@ -1,10 +1,11 @@
-package br.com.astrosoft.separacao.viewmodel
+package br.com.astrosoft.abastecimento.viewmodel
 
+import br.com.astrosoft.abastecimento.model.beans.Relatorio
+import br.com.astrosoft.framework.model.RegistryUserInfo
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.mid
 import br.com.astrosoft.framework.viewmodel.PrintText
-import br.com.astrosoft.separacao.model.beans.Relatorio
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -14,7 +15,7 @@ class RelatorioText: PrintText<Relatorio>() {
     columText("Descricao", 30) {name}
     columText("Grade", 8) {grade}
     columNumber("Qtd", 8) {qtty}
-    columNumber("Estoque", 8, lineBreak = true) {estoque}
+    columNumber("Estoque", 8, lineBreak = true) {saldoApp.toDouble()}
     
     columText("Forn", 6) {
       fornecedor.toString()
@@ -40,10 +41,10 @@ class RelatorioText: PrintText<Relatorio>() {
     val hora =
       LocalTime.now()
         .format()
-    return listOf("Ressuprimento Pedido $pedido $abreviacao".negrito(),
+    return listOf("Abastecimento Loja MF $pedido $abreviacao".negrito(),
                   "Data: $data      Hora $hora".negrito(),
                   "",
-                  "Pedido Loja: _________________ Separador: __________________".negrito(),
+                  "Requisitado: ${RegistryUserInfo.usuario?.mid(0, 6)} Recebido: __________________".negrito(),
                   "",
                   "00$pedido".barras())
   }

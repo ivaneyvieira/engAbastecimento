@@ -1,13 +1,14 @@
-package br.com.astrosoft.separacao.view
+package br.com.astrosoft.abastecimento.view
 
+import br.com.astrosoft.abastecimento.model.beans.Pedido
+import br.com.astrosoft.abastecimento.model.beans.ProdutoPedido
+import br.com.astrosoft.abastecimento.model.beans.UserSaci
+import br.com.astrosoft.abastecimento.viewmodel.EditarViewModel
+import br.com.astrosoft.abastecimento.viewmodel.IEditarView
+import br.com.astrosoft.abastecimento.viewmodel.ProdutoDlg
 import br.com.astrosoft.framework.view.ViewLayout
-import br.com.astrosoft.separacao.model.beans.Pedido
-import br.com.astrosoft.separacao.model.beans.ProdutoPedido
-import br.com.astrosoft.separacao.model.beans.UserSaci
-import br.com.astrosoft.separacao.viewmodel.EditarViewModel
-import br.com.astrosoft.separacao.viewmodel.IEditarView
-import br.com.astrosoft.separacao.viewmodel.ProdutoDlg
 import com.github.mvysny.karibudsl.v10.addColumnFor
+import com.github.mvysny.karibudsl.v10.br
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.comboBox
 import com.github.mvysny.karibudsl.v10.em
@@ -22,20 +23,16 @@ import com.github.mvysny.karibudsl.v10.refresh
 import com.github.mvysny.karibudsl.v10.responsiveSteps
 import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.button.Button
-import com.vaadin.flow.component.button.ButtonVariant
 import com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY
+import com.vaadin.flow.component.button.ButtonVariant.LUMO_SMALL
 import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.dependency.HtmlImport
 import com.vaadin.flow.component.dialog.Dialog
-import com.vaadin.flow.component.grid.ColumnTextAlign.CENTER
 import com.vaadin.flow.component.grid.ColumnTextAlign.END
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.SelectionMode
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.GridVariant.LUMO_COMPACT
-import com.vaadin.flow.component.icon.Icon
-import com.vaadin.flow.component.icon.VaadinIcon.CHECK_CIRCLE_O
-import com.vaadin.flow.component.icon.VaadinIcon.CIRCLE_THIN
 import com.vaadin.flow.component.icon.VaadinIcon.INSERT
 import com.vaadin.flow.component.icon.VaadinIcon.SPLIT
 import com.vaadin.flow.component.icon.VaadinIcon.TRASH
@@ -45,7 +42,6 @@ import com.vaadin.flow.component.textfield.TextFieldVariant.LUMO_ALIGN_RIGHT
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.SortDirection.ASCENDING
-import com.vaadin.flow.data.renderer.ComponentRenderer
 import com.vaadin.flow.data.renderer.NumberRenderer
 import com.vaadin.flow.data.value.ValueChangeMode.EAGER
 import com.vaadin.flow.router.PageTitle
@@ -56,9 +52,8 @@ import java.text.DecimalFormat
 @PageTitle("Editar")
 @HtmlImport("frontend://styles/shared-styles.html")
 class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
-  private lateinit var pedidoMae: IntegerField
   private var gridProduto: Grid<ProdutoPedido>
-  private lateinit var cmbPedido: ComboBox<Pedido>
+  private lateinit var edtPedido: IntegerField
   override val viewModel: EditarViewModel = EditarViewModel(this)
   private val dataProviderProdutos = ListDataProvider<ProdutoPedido>(mutableListOf())
   
@@ -67,23 +62,17 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
   init {
     form("Editar pedidos") {
       isExpand = false
-      cmbPedido = comboBox("Numero do pedido") {
+      edtPedido = integerField("Numero do pedido") {
         colspan = 1
-        setItems(viewModel.pedidosSeparacao)
-        setItemLabelGenerator {
-          "${it.ordno} - ${it.tipoOrigem.descricao}"
-        }
-        isAllowCustomValue = false
-        isPreventInvalidInput = false
-        addValueChangeListener {evento ->
+        this.valueChangeMode = EAGER
+        this.addValueChangeListener {evento ->
           if(evento.isFromClient) {
-            updateGrid(value)
+            val pedido = viewModel.findPedidos(evento.value)
+            updateGrid(pedido)
           }
         }
       }
-      pedidoMae = integerField("Pedido mãe") {
-        isEnabled = false
-      }
+      br()
     }
     gridProduto = grid(dataProvider = dataProviderProdutos) {
       isExpand = true
@@ -112,14 +101,10 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
       
       addItemClickListener {event ->
         when {
-          editor.isOpen                           -> {
+          editor.isOpen -> {
             editor.save()
           }
-          event.column.id.orElse("") == "colLoja" -> {
-            event.item.estoqueLoja = !(event.item.estoqueLoja ?: false)
-            this@grid.refresh()
-          }
-          else                                    -> {
+          else          -> {
             editor.editItem(event.item)
             edtQtty.focus()
           }
@@ -128,28 +113,10 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
   
       editor.addSaveListener {event ->
         val produto = event.item
-        if(produto.quantidadeValida) {
-          binder.writeBean(produto)
-        }
-        else {
-          val msg = "A quantidade deveria está entre ${produto.qttyMin} e ${produto.qttyMax}"
-          showError(msg)
-          editor.cancel()
-          produto.qttyEdit = produto.qtty.toInt()
-        }
+    
+        binder.writeBean(produto)
       }
   
-      addColumnFor(ProdutoPedido::estoqueLoja, renderer = ComponentRenderer<Icon, ProdutoPedido> {produto ->
-        if(produto.estoqueLoja == true)
-          CHECK_CIRCLE_O.create()
-        else
-          CIRCLE_THIN.create()
-      }) {
-        setHeader("Loja")
-        flexGrow = 1
-        this.textAlign = CENTER
-        this.setId("colLoja")
-      }
       addColumnFor(ProdutoPedido::codigo) {
         setHeader("Código")
         flexGrow = 1
@@ -163,28 +130,36 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
         setHeader("Grade")
         flexGrow = 1
       }
-      addColumnFor(ProdutoPedido::fornecedor) {
-        setHeader("Fornecedor")
-        flexGrow = 1
-      }
-      addColumnFor(ProdutoPedido::localizacao) {
+      addColumnFor(ProdutoPedido::abreviacao) {
         setHeader("Localização")
         flexGrow = 3
       }
+  
+      addColumnFor(ProdutoPedido::embalagem, NumberRenderer(ProdutoPedido::embalagem, DecimalFormat("0"))) {
+        setHeader("Embalagem")
+        flexGrow = 1
+        this.textAlign = END
+      }
       addColumnFor(ProdutoPedido::qttyEdit, NumberRenderer(ProdutoPedido::qttyEdit, DecimalFormat("0"))) {
-        setHeader("Quant")
+        setHeader("QTD Pedido")
         flexGrow = 1
         this.textAlign = END
         setEditorComponent(edtQtty)
       }
       addColumnFor(ProdutoPedido::saldo, NumberRenderer(ProdutoPedido::saldo, DecimalFormat("0"))) {
-        setHeader("Saldo")
+        setHeader("Saldo Atual")
         flexGrow = 1
         this.textAlign = END
       }
+      addColumnFor(ProdutoPedido::saldoFinal, NumberRenderer(ProdutoPedido::saldoFinal, DecimalFormat("0"))) {
+        setHeader("Saldo Final")
+        flexGrow = 1
+        this.textAlign = END
+      }
+  
       addComponentColumn {produto ->
         Button(TRASH.create()).apply {
-          this.addThemeVariants(ButtonVariant.LUMO_SMALL)
+          this.addThemeVariants(LUMO_SMALL)
           addClickListener {
             val produtoInfo = "${produto.prdno}${if(produto.grade == "") "" else " - ${produto.grade}"}"
             showQuestion("Pode excluir o produto $produtoInfo?") {
@@ -195,7 +170,7 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
       }
   
       sort(listOf(
-        GridSortOrder(getColumnBy(ProdutoPedido::localizacao), ASCENDING),
+        GridSortOrder(getColumnBy(ProdutoPedido::abreviacao), ASCENDING),
         GridSortOrder(getColumnBy(ProdutoPedido::descricao), ASCENDING),
         GridSortOrder(getColumnBy(ProdutoPedido::grade), ASCENDING)
                  ))
@@ -207,7 +182,7 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
         addClickListener {
           if(gridProduto.editor.isOpen)
             gridProduto.editor.save()
-          viewModel.processar()
+          //viewModel.processar()
         }
       }
       button("Novo produto") {
@@ -222,15 +197,13 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
   }
   
   override val pedido: Pedido?
-    get() = Pedido.findPedidos(cmbPedido.value?.ordno ?: 0)
+    get() = Pedido.findPedidos(edtPedido.value)
   override val produtos: List<ProdutoPedido>
     get() = dataProviderProdutos.getAll()
   
   override fun updateGrid() {
     val pedidoAtual = pedido
     updateGrid(pedidoAtual)
-    cmbPedido.setItems(viewModel.pedidos())
-    cmbPedido.value = pedidoAtual
   }
   
   override fun novoProduto(pedido: Pedido) {
@@ -241,11 +214,13 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
   
   private fun updateGrid(pedidoNovo: Pedido?) {
     val userSaci = UserSaci.userAtual
-    gridProduto.selectionModel.deselectAll()
     dataProviderProdutos.items.clear()
-    dataProviderProdutos.items.addAll(pedidoNovo?.produtos(userSaci).orEmpty())
-    dataProviderProdutos.refreshAll()
-    pedidoMae.value = pedidoNovo?.ordnoMae
+    val user = userSaci
+    val produto =
+      pedidoNovo?.produtos(user)
+        .orEmpty()
+    dataProviderProdutos.items.addAll(produto)
+    gridProduto.refresh()
   }
 }
 

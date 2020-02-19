@@ -1,4 +1,4 @@
-package br.com.astrosoft.separacao.model.beans
+package br.com.astrosoft.abastecimento.model.beans
 
 data class Produto(
   val prdno: String,

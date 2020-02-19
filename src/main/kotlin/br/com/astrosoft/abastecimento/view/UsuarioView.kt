@@ -1,10 +1,10 @@
-package br.com.astrosoft.separacao.view
+package br.com.astrosoft.abastecimento.view
 
+import br.com.astrosoft.abastecimento.model.beans.UserSaci
+import br.com.astrosoft.abastecimento.viewmodel.IUsuarioView
+import br.com.astrosoft.abastecimento.viewmodel.UsuarioViewModel
 import br.com.astrosoft.framework.view.ViewLayout
 import br.com.astrosoft.framework.view.multiselectComboBox
-import br.com.astrosoft.separacao.model.beans.UserSaci
-import br.com.astrosoft.separacao.viewmodel.IUsuarioView
-import br.com.astrosoft.separacao.viewmodel.UsuarioViewModel
 import com.github.mvysny.karibudsl.v10.alignSelf
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.checkBox
@@ -62,48 +62,12 @@ class UsuarioView: ViewLayout<UsuarioViewModel>(), IUsuarioView {
     val crud: GridCrud<UserSaci> = GridCrud<UserSaci>(UserSaci::class.java)
     crud.grid
       .setColumns(UserSaci::no.name, UserSaci::login.name, UserSaci::name.name)
-    crud.grid.addColumnBool("Duplicar") {duplicar}
-    crud.grid.addColumnBool("Separar") {separar}
+  
     crud.grid.addColumnBool("Editar") {editar}
-    crud.grid.addColumnBool("Remover") {remover}
   
     crud.grid.addThemeVariants(LUMO_COMPACT)
   
     crud.crudFormFactory = UserCrudFormFactory(viewModel)
-    /*
-    crud.crudFormFactory
-      .setUseBeanValidation(true)
-    val allFields = listOf(UserSaci::no.name,
-                           UserSaci::login.name,
-                           UserSaci::name.name,
-                           UserSaci::duplicar.name,
-                           UserSaci::separar.name,
-                           UserSaci::editar.name,
-                           UserSaci::remover.name,
-                           UserSaci::listAbreviacoes.name)
-    crud.crudFormFactory.setVisibleProperties(*allFields.toTypedArray())
-    crud.crudFormFactory.setDisabledProperties(UPDATE, UserSaci::no.name, UserSaci::login.name, UserSaci::name.name)
-    crud.crudFormFactory.setFieldCaptions(UPDATE, * captionFields.toTypedArray())
-    crud.crudFormFactory.setDisabledProperties(READ, *allFields.toTypedArray())
-    crud.crudFormFactory.setFieldCaptions(READ, * captionFields.toTypedArray())
-    crud.crudFormFactory.setDisabledProperties(DELETE, *allFields.toTypedArray())
-    crud.crudFormFactory.setFieldCaptions(DELETE, * captionFields.toTypedArray())
-    crud.crudFormFactory.setDisabledProperties(ADD, UserSaci::no.name,
-                                               UserSaci::name.name)
-    crud.crudFormFactory.setVisibleProperties(ADD,
-                                              UserSaci::login.name,
-                                              UserSaci::duplicar.name,
-                                              UserSaci::separar.name,
-                                              UserSaci::editar.name,
-                                              UserSaci::editar.name,
-                                              UserSaci::listAbreviacoes.name)
-    crud.crudFormFactory.setFieldCaptions(ADD, "Login", "Duplicar", "Separar", "Editar", "Remover", "Localizações")
-    crud.crudFormFactory.setFieldProvider(UserSaci::listAbreviacoes.name) {
-      TwinColSelect<String>().apply {
-        this.setItems(viewModel.abreviacoes())
-      }
-    }
-    */
     crud.setSizeFull()
     return crud
   }
@@ -161,17 +125,8 @@ class UserCrudFormFactory(private val viewModel: UsuarioViewModel): AbstractCrud
           }
         
         if(operation in listOf(ADD, READ, DELETE, UPDATE)) {
-          checkBox("Duplicar") {
-            binder.bind(this, UserSaci::duplicar.name)
-          }
-          checkBox("Separar") {
-            binder.bind(this, UserSaci::separar.name)
-          }
           checkBox("Editar") {
             binder.bind(this, UserSaci::editar.name)
-          }
-          checkBox("Remover") {
-            binder.bind(this, UserSaci::remover.name)
           }
         }
       }

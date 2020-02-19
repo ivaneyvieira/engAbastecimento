@@ -1,16 +1,27 @@
 DELETE
-FROM ords
+FROM sqldados.eoprd
 WHERE storeno = :storeno AND
-      no BETWEEN :numeroI AND :numeroF;
+      ordno = :ordno AND
+      prdno = LPAD(:prdno, 16, ' ') AND
+      grade = :grade;
+
 DELETE
-FROM orddlv
+FROM sqldados.eoprdf
 WHERE storeno = :storeno AND
-      ordno BETWEEN :numeroI AND :numeroF;
+      ordno = :ordno AND
+      prdno = LPAD(:prdno, 16, ' ') AND
+      grade = :grade;
+
 DELETE
-FROM oprd
+FROM sqldados.eoprd2
 WHERE storeno = :storeno AND
-      ordno BETWEEN :numeroI AND :numeroF;
+      ordno = :ordno AND
+      prdno = LPAD(:prdno, 16, ' ') AND
+      grade = :grade;
+
 DELETE
-FROM oprdxf
+FROM sqldados.eoprd3
 WHERE storeno = :storeno AND
-      ordno BETWEEN :numeroI AND :numeroF
+      ordno = :ordno AND
+      prdno = LPAD(:prdno, 16, ' ') AND
+      grade = :grade

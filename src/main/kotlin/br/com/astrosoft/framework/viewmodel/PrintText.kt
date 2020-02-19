@@ -1,9 +1,9 @@
 package br.com.astrosoft.framework.viewmodel
 
+import br.com.astrosoft.abastecimento.model.QuerySaci
 import br.com.astrosoft.framework.util.CupsUtils
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
-import br.com.astrosoft.separacao.model.QuerySaci
 import java.io.File
 import java.text.DecimalFormat
 

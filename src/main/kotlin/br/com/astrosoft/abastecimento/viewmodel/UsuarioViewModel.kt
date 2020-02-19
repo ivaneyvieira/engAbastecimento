@@ -1,10 +1,10 @@
-package br.com.astrosoft.separacao.viewmodel
+package br.com.astrosoft.abastecimento.viewmodel
 
+import br.com.astrosoft.abastecimento.model.beans.Pedido
+import br.com.astrosoft.abastecimento.model.beans.UserSaci
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
 import br.com.astrosoft.framework.viewmodel.fail
-import br.com.astrosoft.separacao.model.beans.Pedido
-import br.com.astrosoft.separacao.model.beans.UserSaci
 
 class UsuarioViewModel(view: IUsuarioView): ViewModel<IUsuarioView>(view) {
   fun findAll(): List<UserSaci>? {
