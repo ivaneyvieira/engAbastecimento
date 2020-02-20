@@ -1,8 +1,8 @@
 package br.com.astrosoft.framework.view
 
 import br.com.astrosoft.abastecimento.model.saci
+import br.com.astrosoft.abastecimento.view.AbastecimentoLayout
 import br.com.astrosoft.abastecimento.view.EditarView
-import br.com.astrosoft.abastecimento.view.SeparacaoLayout
 import br.com.astrosoft.framework.model.RegistryUserInfo
 import br.com.astrosoft.framework.view.LoginView.Companion.LOGIN_PATH
 import com.github.mvysny.karibudsl.v10.navigateToView
@@ -19,7 +19,7 @@ class LoginView: VerticalLayout(), BeforeEnterObserver {
   private val appName = RegistryUserInfo.appName
   private val version = "Versão ${RegistryUserInfo.version}"
   private val loginForm = LoginFormApp(appName, version) {
-    SeparacaoLayout.updateLayout()
+    AbastecimentoLayout.updateLayout()
     navigateToView<LoginView>()
   }
   

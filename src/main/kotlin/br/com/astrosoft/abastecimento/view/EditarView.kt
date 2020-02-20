@@ -33,8 +33,8 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.SelectionMode
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.GridVariant.LUMO_COMPACT
-import com.vaadin.flow.component.icon.VaadinIcon.INSERT
-import com.vaadin.flow.component.icon.VaadinIcon.SPLIT
+import com.vaadin.flow.component.icon.VaadinIcon.CHECK
+import com.vaadin.flow.component.icon.VaadinIcon.PRINT
 import com.vaadin.flow.component.icon.VaadinIcon.TRASH
 import com.vaadin.flow.component.textfield.IntegerField
 import com.vaadin.flow.component.textfield.TextField
@@ -48,7 +48,7 @@ import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import java.text.DecimalFormat
 
-@Route(layout = SeparacaoLayout::class)
+@Route(layout = AbastecimentoLayout::class)
 @PageTitle("Editar")
 @HtmlImport("frontend://styles/shared-styles.html")
 class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
@@ -174,23 +174,31 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
         GridSortOrder(getColumnBy(ProdutoPedido::descricao), ASCENDING),
         GridSortOrder(getColumnBy(ProdutoPedido::grade), ASCENDING)
                  ))
+  
+      this.setClassNameGenerator {
+        when {
+          it.saldoInsuficiente -> "error_row"
+          it.qttyAlterada      -> "info_row"
+          else                 -> null
+        }
+      }
     }
     toolbar {
-      button("Processar") {
-        icon = SPLIT.create()
+      button("Gravar") {
+        icon = CHECK.create()
         addThemeVariants(LUMO_PRIMARY)
         addClickListener {
           if(gridProduto.editor.isOpen)
             gridProduto.editor.save()
-          //viewModel.processar()
+          viewModel.gravar()
         }
       }
-      button("Novo produto") {
-        icon = INSERT.create()
+      button("Imprimir") {
+        icon = PRINT.create()
         addClickListener {
           if(gridProduto.editor.isOpen)
             gridProduto.editor.save()
-          viewModel.novoProduto()
+          viewModel.imprimir()
         }
       }
     }

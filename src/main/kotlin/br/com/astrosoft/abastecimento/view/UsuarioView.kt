@@ -39,7 +39,7 @@ import org.vaadin.crudui.crud.CrudOperation.UPDATE
 import org.vaadin.crudui.crud.impl.GridCrud
 import org.vaadin.crudui.form.AbstractCrudFormFactory
 
-@Route(layout = SeparacaoLayout::class)
+@Route(layout = AbastecimentoLayout::class)
 @PageTitle("Usuário")
 class UsuarioView: ViewLayout<UsuarioViewModel>(), IUsuarioView {
   override val viewModel = UsuarioViewModel(this)

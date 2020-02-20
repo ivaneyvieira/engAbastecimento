@@ -31,7 +31,7 @@ data class Pedido(val storeno: Int = 1, val ordno: Int) {
     }
   
     fun removeProduto(pedido: Pedido, produto: ProdutoPedido) {
-      TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+      saci.removePedido(pedido.ordno, produto.prdno, produto.grade)
     }
   }
   

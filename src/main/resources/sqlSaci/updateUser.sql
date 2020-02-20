@@ -1,4 +1,4 @@
 UPDATE sqldados.users
-SET bits2  = :bitAcesso,
+SET bits3  = :bitAcesso,
     auxStr = :abreviacoes
 WHERE login = :login

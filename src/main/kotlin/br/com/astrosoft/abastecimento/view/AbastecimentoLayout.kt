@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
 @PWA(name = "Abastecimento de loja",
      shortName = "Abastecimento",
      iconPath = "icons/logo.png")
-class SeparacaoLayout: AppLayoutRouterLayout() {
+class AbastecimentoLayout: AppLayoutRouterLayout() {
   init {
     init(atualizaMenu())
   }

@@ -15,10 +15,14 @@ data class ProdutoPedido(
   val saldo: Int
     get() = saldoApp(prdno, grade, abreviacao)
   val saldoFinal: Int
-    get() = saldo - qtty
+    get() = saldo - qttyEdit
   val codigo
     get() = prdno.lpad(6, "0")
   var qttyEdit: Int = 0
+  val saldoInsuficiente
+    get() = qttyEdit > saldo
+  val qttyAlterada
+    get() = qttyEdit != qtty
   
   companion object {
     private val appEstoque = QueryAppEstoque()
