@@ -13,7 +13,6 @@ data class Relatorio(
   val tipo: String,
   val qtty: Double,
   val fornecedor: Int,
-  val estoque: Double,
   val embalagem: Double
                     ) {
   val saldoApp

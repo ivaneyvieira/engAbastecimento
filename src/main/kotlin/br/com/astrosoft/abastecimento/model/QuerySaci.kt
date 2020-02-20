@@ -3,6 +3,7 @@ package br.com.astrosoft.abastecimento.model
 import br.com.astrosoft.abastecimento.model.beans.Pedido
 import br.com.astrosoft.abastecimento.model.beans.Produto
 import br.com.astrosoft.abastecimento.model.beans.ProdutoPedido
+import br.com.astrosoft.abastecimento.model.beans.Relatorio
 import br.com.astrosoft.abastecimento.model.beans.UserSaci
 import br.com.astrosoft.framework.model.QueryDB
 import br.com.astrosoft.framework.util.DB
@@ -104,6 +105,16 @@ class QuerySaci: QueryDB(driver, url, username, password) {
       q.addOptionalParameter("grade", grade)
       q.addOptionalParameter("qtty", qtty)
       q.executeUpdate()
+    }
+  }
+  
+  fun listaRelatorio(ordno: Int): List<Relatorio> {
+    val sql = "/sqlSaci/relatorio.sql"
+    val storeno = 1
+    return query(sql) {q ->
+      q.addOptionalParameter("storeno", storeno)
+      q.addOptionalParameter("ordno", ordno)
+      q.executeAndFetch(Relatorio::class.java)
     }
   }
   

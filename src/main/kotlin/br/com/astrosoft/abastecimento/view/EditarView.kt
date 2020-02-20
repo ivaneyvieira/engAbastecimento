@@ -5,29 +5,20 @@ import br.com.astrosoft.abastecimento.model.beans.ProdutoPedido
 import br.com.astrosoft.abastecimento.model.beans.UserSaci
 import br.com.astrosoft.abastecimento.viewmodel.EditarViewModel
 import br.com.astrosoft.abastecimento.viewmodel.IEditarView
-import br.com.astrosoft.abastecimento.viewmodel.ProdutoDlg
 import br.com.astrosoft.framework.view.ViewLayout
 import com.github.mvysny.karibudsl.v10.addColumnFor
 import com.github.mvysny.karibudsl.v10.br
 import com.github.mvysny.karibudsl.v10.button
-import com.github.mvysny.karibudsl.v10.comboBox
-import com.github.mvysny.karibudsl.v10.em
-import com.github.mvysny.karibudsl.v10.formLayout
 import com.github.mvysny.karibudsl.v10.getAll
 import com.github.mvysny.karibudsl.v10.getColumnBy
 import com.github.mvysny.karibudsl.v10.grid
-import com.github.mvysny.karibudsl.v10.horizontalLayout
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.karibudsl.v10.refresh
-import com.github.mvysny.karibudsl.v10.responsiveSteps
-import com.github.mvysny.karibudsl.v10.textField
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY
 import com.vaadin.flow.component.button.ButtonVariant.LUMO_SMALL
-import com.vaadin.flow.component.combobox.ComboBox
 import com.vaadin.flow.component.dependency.HtmlImport
-import com.vaadin.flow.component.dialog.Dialog
 import com.vaadin.flow.component.grid.ColumnTextAlign.END
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.SelectionMode
@@ -37,13 +28,10 @@ import com.vaadin.flow.component.icon.VaadinIcon.CHECK
 import com.vaadin.flow.component.icon.VaadinIcon.PRINT
 import com.vaadin.flow.component.icon.VaadinIcon.TRASH
 import com.vaadin.flow.component.textfield.IntegerField
-import com.vaadin.flow.component.textfield.TextField
-import com.vaadin.flow.component.textfield.TextFieldVariant.LUMO_ALIGN_RIGHT
 import com.vaadin.flow.data.binder.Binder
 import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.SortDirection.ASCENDING
 import com.vaadin.flow.data.renderer.NumberRenderer
-import com.vaadin.flow.data.value.ValueChangeMode.EAGER
 import com.vaadin.flow.data.value.ValueChangeMode.ON_CHANGE
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
@@ -217,12 +205,6 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
     updateGrid(pedidoAtual)
   }
   
-  override fun novoProduto(pedido: Pedido) {
-    ProdutoDialog(viewModel, pedido).apply {
-      open()
-    }
-  }
-  
   private fun updateGrid(pedidoNovo: Pedido?) {
     val userSaci = UserSaci.userAtual
     dataProviderProdutos.items.clear()
@@ -232,89 +214,5 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
         .orEmpty()
     dataProviderProdutos.items.addAll(produto)
     gridProduto.refresh()
-  }
-}
-
-class ProdutoDialog(private val viewModel: EditarViewModel, val pedido: Pedido): Dialog() {
-  private var produto: ProdutoDlg = ProdutoDlg(pedido)
-  private lateinit var edtQtty: IntegerField
-  private lateinit var edtDescricao: TextField
-  private lateinit var edtGrade: ComboBox<String>
-  private lateinit var edtLocalizacao: ComboBox<String>
-  private lateinit var edtCodigo: TextField
-  
-  init {
-    em("Adiciona Produto")
-    formLayout {
-      responsiveSteps {
-        "0px"(4, top)
-      }
-      edtCodigo = textField("Código") {
-        colspan = 1
-        value = produto.codigo
-        valueChangeMode = EAGER
-        
-        addValueChangeListener {event ->
-          if(event.isFromClient) {
-            val value = event.value
-            val produtos = viewModel.findProduto(value)
-            edtDescricao.value = produtos.firstOrNull()?.descricao ?: "Não encontrado"
-            val grades =
-              produtos.map {it.grade}
-                .distinct()
-                .sorted()
-            edtGrade.setItems(grades)
-            edtGrade.value = grades.firstOrNull()
-            val localizacoes = produtos.map {it.localizacao}
-              .distinct()
-              .sorted()
-            edtLocalizacao.setItems(localizacoes)
-            edtLocalizacao.value = localizacoes.firstOrNull()
-          }
-        }
-      }
-      edtDescricao = textField("Descrição") {
-        colspan = 3
-        value = ""
-        isReadOnly = true
-      }
-      edtGrade = comboBox("Grade") {
-        colspan = 1
-        isRequired = false
-        isAllowCustomValue = false
-      }
-      edtQtty = integerField("Quantidade") {
-        colspan = 1
-        isAutoselect = true
-        addThemeVariants(LUMO_ALIGN_RIGHT)
-        value = produto.qtty
-      }
-      edtLocalizacao = comboBox("Localização") {
-        colspan = 2
-        isRequired = false
-        isAllowCustomValue = false
-      }
-    }
-    horizontalLayout {
-      button("Salva") {
-        addThemeVariants(LUMO_PRIMARY)
-        addClickListener {
-          val produto = produto.apply {
-            codigo = edtCodigo.value ?: ""
-            grade = edtGrade.value ?: ""
-            qtty = edtQtty.value ?: 0
-            produtos = viewModel.findProduto(codigo)
-            localizacao = edtLocalizacao.value ?: ""
-          }
-          viewModel.salvaProduto(produto)
-          this@ProdutoDialog.close()
-        }
-      }
-      button("Cancela") {
-        addClickListener {
-          this@ProdutoDialog.close()
-        }
-      }
-    }
   }
 }

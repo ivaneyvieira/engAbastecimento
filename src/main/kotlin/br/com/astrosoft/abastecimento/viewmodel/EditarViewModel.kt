@@ -16,20 +16,6 @@ class EditarViewModel(view: IEditarView): ViewModel<IEditarView>(view) {
     return Pedido.findProduto(prdno)
   }
   
-  fun salvaProduto(produto: ProdutoDlg) = exec {
-    val userSaci = UserSaci.userAtual
-    produto.validadialog()
-    val pedido = view.pedido ?: fail("Pedido não selecionado")
-    val codigo = produto.codigo
-    val grade = produto.grade
-    val localizacao = produto.localizacao
-    val qtty = produto.qtty ?: fail("Quantidade não informada")
-    if(pedido.produtos(userSaci).any {it.prdno == produto.codigo && it.grade == produto.grade})
-      fail("O produto já está adicionado")
-    // Pedido.adicionarProduto(pedido, codigo, grade, qtty, localizacao)
-    view.updateGrid()
-  }
-  
   fun removePedido(produto: ProdutoPedido?) = exec {
     val pedido = view.pedido ?: fail("Nenum pedido selecionado")
     produto ?: fail("Produto não selecionado")
@@ -68,6 +54,8 @@ class EditarViewModel(view: IEditarView): ViewModel<IEditarView>(view) {
   }
   
   fun imprimir() = exec {
+    val pedido = view.pedido ?: fail("Pedido inválido")
+    RelatorioText().print("RESSUPRIMENTO", Pedido.listaRelatorio(pedido.ordno))
   }
 }
 
@@ -76,7 +64,6 @@ interface IEditarView: IView {
   val produtos: List<ProdutoPedido>
   
   fun updateGrid()
-  fun novoProduto(pedido: Pedido)
 }
 
 class ProdutoDlg(val pedido: Pedido) {
