@@ -3,9 +3,7 @@ package br.com.astrosoft.abastecimento.viewmodel
 import br.com.astrosoft.abastecimento.model.beans.Pedido
 import br.com.astrosoft.abastecimento.model.beans.Produto
 import br.com.astrosoft.abastecimento.model.beans.ProdutoPedido
-import br.com.astrosoft.abastecimento.model.beans.UserSaci
 import br.com.astrosoft.abastecimento.model.saci
-import br.com.astrosoft.framework.util.mid
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
 import br.com.astrosoft.framework.viewmodel.fail
@@ -65,25 +63,3 @@ interface IEditarView: IView {
   
   fun updateGrid()
 }
-
-class ProdutoDlg(val pedido: Pedido) {
-  var codigo: String = ""
-  var grade: String = ""
-  var localizacao: String = ""
-  var qtty: Int? = 0
-  var produtos: List<Produto> = emptyList()
-  
-  fun validadialog() {
-    val userSaci = UserSaci.userAtual
-    if(produtos.isEmpty())
-      fail("Produto inválido")
-    val quantidade = qtty ?: 0
-    if(quantidade <= 0)
-      fail("Quantidade inválida")
-    val abreviacao = localizacao.mid(0, 4)
-    if(!pedido.abreviacoes(userSaci).contains(abreviacao))
-      fail("A localização $abreviacao não é compativel")
-  }
-}
-
-data class PedidosLojaAbreviacao(val numero: Int, val abreviacao: String)

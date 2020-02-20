@@ -110,7 +110,7 @@ class QuerySaci: QueryDB(driver, url, username, password) {
   
   fun listaRelatorio(ordno: Int): List<Relatorio> {
     val sql = "/sqlSaci/relatorio.sql"
-    val storeno = 1
+    val storeno = 4
     return query(sql) {q ->
       q.addOptionalParameter("storeno", storeno)
       q.addOptionalParameter("ordno", ordno)
