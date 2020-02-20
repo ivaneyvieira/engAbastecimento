@@ -31,15 +31,15 @@ class UserSaci {
   
   fun initVars(): UserSaci {
     val bits = bitAcesso ?: 0
-    ativo = (bits and 2.toDouble().pow(0).toInt()) != 0 || admin
-    editar = (bits and 2.toDouble().pow(4).toInt()) != 0 || admin
+    ativo = (bits and 2.toDouble().pow(5).toInt()) != 0 || admin
+    editar = (bits and 2.toDouble().pow(6).toInt()) != 0 || admin
     return this
   }
   
   fun bitAcesso(): Int {
-    val ativoSum = if(ativo) 2.toDouble().pow(0).toInt()
+    val ativoSum = if(ativo) 2.toDouble().pow(5).toInt()
     else 0
-    val editarSum = if(editar) 2.toDouble().pow(4).toInt() else 0
+    val editarSum = if(editar) 2.toDouble().pow(6).toInt() else 0
     return ativoSum + editarSum
   }
   
