@@ -1,10 +1,11 @@
 package br.com.astrosoft.abastecimento.viewmodel
 
 import br.com.astrosoft.abastecimento.model.beans.Relatorio
-import br.com.astrosoft.framework.model.RegistryUserInfo
+import br.com.astrosoft.framework.model.RegistryUserInfo.usuario
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.mid
+import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.framework.viewmodel.PrintText
 import java.time.LocalDate
 import java.time.LocalTime
@@ -44,8 +45,8 @@ class RelatorioText: PrintText<Relatorio>() {
     return listOf("Abastecimento Loja MF $pedido $abreviacao".negrito(),
                   "Data: $data      Hora $hora".negrito(),
                   "",
-                  "Requisitado: ${RegistryUserInfo.usuario?.mid(0, 6)} Recebido: __________________".negrito(),
+                  "Requisitado: ${usuario?.rpad(12, " ")} Recebido: ____________________".negrito(),
                   "",
-                  "00$pedido".barras())
+                  "004$pedido".barras())
   }
 }
