@@ -44,6 +44,7 @@ import com.vaadin.flow.data.provider.ListDataProvider
 import com.vaadin.flow.data.provider.SortDirection.ASCENDING
 import com.vaadin.flow.data.renderer.NumberRenderer
 import com.vaadin.flow.data.value.ValueChangeMode.EAGER
+import com.vaadin.flow.data.value.ValueChangeMode.ON_CHANGE
 import com.vaadin.flow.router.PageTitle
 import com.vaadin.flow.router.Route
 import java.text.DecimalFormat
@@ -64,10 +65,12 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
       isExpand = false
       edtPedido = integerField("Numero do pedido") {
         colspan = 1
-        this.valueChangeMode = EAGER
+        this.valueChangeMode = ON_CHANGE
         this.addValueChangeListener {evento ->
           if(evento.isFromClient) {
             val pedido = viewModel.findPedidos(evento.value)
+            if(pedido == null) value = null
+  
             updateGrid(pedido)
           }
         }

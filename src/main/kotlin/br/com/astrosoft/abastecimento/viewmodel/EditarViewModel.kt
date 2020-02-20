@@ -39,7 +39,22 @@ class EditarViewModel(view: IEditarView): ViewModel<IEditarView>(view) {
   }
   
   fun findPedidos(ordno: Int?): Pedido? {
-    return Pedido.findPedidos(ordno)
+    val pedido = Pedido.findPedidos(ordno) ?: return null
+    return when {
+      !pedido.isClienteValido -> {
+        view.showError("O cliente não é válido")
+        null
+      }
+      !pedido.isMetodoValido  -> {
+        view.showError("O método de pagamento não é válido")
+        null
+      }
+      !pedido.isStatusValido  -> {
+        view.showError("O status do pedido não é orçamento")
+        null
+      }
+      else                    -> pedido
+    }
   }
   
   fun gravar() = exec {
