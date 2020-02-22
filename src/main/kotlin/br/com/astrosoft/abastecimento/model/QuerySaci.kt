@@ -34,9 +34,9 @@ class QuerySaci: QueryDB(driver, url, username, password) {
   fun updateUser(user: UserSaci) {
     val sql = "/sqlSaci/updateUser.sql"
     script(sql) {q ->
-      q.addParameter("login", user.login)
-      q.addParameter("bitAcesso", user.bitAcesso())
-      q.addParameter("abreviacoes", user.abreviacoes)
+      q.addOptionalParameter("login", user.login)
+      q.addOptionalParameter("bitAcesso", user.bitAcesso())
+      q.addOptionalParameter("abreviacoes", user.abreviacoes)
       q.executeUpdate()
     }
   }

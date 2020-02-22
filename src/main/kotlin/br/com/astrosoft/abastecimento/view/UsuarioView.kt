@@ -38,6 +38,7 @@ import org.vaadin.crudui.crud.CrudOperation.READ
 import org.vaadin.crudui.crud.CrudOperation.UPDATE
 import org.vaadin.crudui.crud.impl.GridCrud
 import org.vaadin.crudui.form.AbstractCrudFormFactory
+import org.vaadin.gatanaso.MultiselectComboBox
 
 @Route(layout = AbastecimentoLayout::class)
 @PageTitle("Usuário")
@@ -58,7 +59,6 @@ class UsuarioView: ViewLayout<UsuarioViewModel>(), IUsuarioView {
   }
   
   private fun gridCrud(): GridCrud<UserSaci> {
-    val captionFields = listOf("Numero", "Login", "Nome", "Duplicar", "Separar", "Editar", "Remover", "")
     val crud: GridCrud<UserSaci> = GridCrud<UserSaci>(UserSaci::class.java)
     crud.grid
       .setColumns(UserSaci::no.name, UserSaci::login.name, UserSaci::name.name)
@@ -91,6 +91,8 @@ class UsuarioView: ViewLayout<UsuarioViewModel>(), IUsuarioView {
 }
 
 class UserCrudFormFactory(private val viewModel: UsuarioViewModel): AbstractCrudFormFactory<UserSaci>() {
+  private lateinit var comboAbreviacao: MultiselectComboBox<String>
+  
   override fun buildNewForm(operation: CrudOperation?,
                             domainObject: UserSaci?,
                             readOnly: Boolean,
@@ -116,11 +118,11 @@ class UserCrudFormFactory(private val viewModel: UsuarioViewModel): AbstractCrud
             binder.bind(this, UserSaci::name.name)
           }
         if(operation in listOf(ADD, READ, DELETE, UPDATE))
-          multiselectComboBox<String> {
+          comboAbreviacao = multiselectComboBox<String> {
             this.label = "Localização"
             this.setItems(viewModel.abreviacoes())
             //placeholder = "Escolha as localizações"
-            // isClearButtonVisible = true
+            isClearButtonVisible = true
             binder.bind(this, UserSaci::listAbreviacoes.name)
           }
         
@@ -129,6 +131,13 @@ class UserCrudFormFactory(private val viewModel: UsuarioViewModel): AbstractCrud
             binder.bind(this, UserSaci::editar.name)
           }
         }
+        if(operation in listOf(ADD, READ, DELETE, UPDATE))
+          button("Adicionar todas as localizações") {
+            addClickListener {
+              val abreviacoes = viewModel.abreviacoes()
+              comboAbreviacao.value = abreviacoes.toSet()
+            }
+          }
       }
       hr()
       horizontalLayout {

@@ -69,7 +69,7 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     }
   }
   
-  fun Query.addOptionalParameter(name: String, value: String): Query {
+  fun Query.addOptionalParameter(name: String, value: String?): Query {
     if(this.paramNameToIdxMap.containsKey(name)) this.addParameter(name, value)
     return this
   }
