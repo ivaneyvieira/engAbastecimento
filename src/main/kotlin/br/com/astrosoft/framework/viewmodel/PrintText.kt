@@ -72,8 +72,9 @@ abstract class PrintText<T> {
   
   private fun inicialize(text: StringBuilder) {
     text.append(0x1b.toChar())
-      .append(0x21.toChar())
-      .append(0x01.toChar())
+      .append(0x40.toChar())
+      .append(0x1b.toChar())
+      .append(0x0f.toChar())
   }
   
   protected fun String.barras(): String {
@@ -109,6 +110,7 @@ abstract class PrintText<T> {
       .append(0x0a.toChar())
       .append(0x1b.toChar())
       .append(0x69.toChar())
+      .append(0x12.toChar())
   }
   
   private fun printDetail(text: StringBuilder, bean: T) {
