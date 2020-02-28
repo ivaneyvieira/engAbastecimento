@@ -61,7 +61,7 @@ class EditarViewModel(view: IEditarView): ViewModel<IEditarView>(view) {
   fun imprimir() = exec {
     val pedido = view.pedido ?: fail("Pedido inválido")
     if(pedido.gravado) {
-      RelatorioText().print("RESSUPRIMENTO", Pedido.listaRelatorio(pedido.ordno))
+      RelatorioTextEpson().print("ABASTECIMENTO", Pedido.listaRelatorio(pedido.ordno))
       view.showInformation("O pedido foi enviado para a impressora")
     }
     else

@@ -10,7 +10,7 @@ import br.com.astrosoft.framework.viewmodel.PrintText
 import java.time.LocalDate
 import java.time.LocalTime
 
-class RelatorioText: PrintText<Relatorio>() {
+class RelatorioTextBema: PrintText<Relatorio>() {
   init {
     columText("Cod", 6) {prdno.lpad(6, "0")}
     columText("Descricao", 30) {name}
