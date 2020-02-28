@@ -23,7 +23,7 @@ abstract class PrintText<T> {
     return emptyList()
   }
   
-  fun columNumber(header: String, size: Int, format: String = "#,##0.##", lineBreak: Boolean = false,
+  fun columNumber(header: String, size: Int, format: String = "0", lineBreak: Boolean = false,
                   process: T.() -> Double): PrintText<T> {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, process) {number ->
