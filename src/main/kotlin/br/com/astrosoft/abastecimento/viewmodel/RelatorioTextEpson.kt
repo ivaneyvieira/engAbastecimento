@@ -17,11 +17,12 @@ class RelatorioTextEpson: PrintText<Relatorio>() {
     columText("Grade", 8) {grade}
     columNumber("Qtd", 4) {qtty}
     columNumber("Estoq", 5) {saldoApp.toDouble()}
-  
+  /*
     columText("Forn", 6) {
       fornecedor.toString()
         .lpad(6, " ")
     }
+   */
     columText("Local", 19) {localizacao}
     columText("Referencia", 27) {mfno_ref}
   }
