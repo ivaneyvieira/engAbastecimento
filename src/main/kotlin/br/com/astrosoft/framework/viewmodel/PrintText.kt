@@ -72,8 +72,6 @@ abstract class PrintText<T> {
   
   private fun inicialize(text: StringBuilder) {
     text.append(0x1b.toChar())
-      .append(0x40.toChar())
-      .append(0x1b.toChar())
       .append(0x0f.toChar())
   }
   
