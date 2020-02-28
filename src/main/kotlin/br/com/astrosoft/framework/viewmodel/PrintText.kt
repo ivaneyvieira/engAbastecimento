@@ -27,7 +27,7 @@ abstract class PrintText<T> {
                   process: T.() -> Double): PrintText<T> {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, process) {number ->
-      decimalFormat.format(number)
+      decimalFormat.format(number.toInt())
         .lpad(size, " ")
     }
     columns.add(column)
