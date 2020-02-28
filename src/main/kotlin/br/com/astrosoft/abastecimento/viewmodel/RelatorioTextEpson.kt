@@ -15,9 +15,9 @@ class RelatorioTextEpson: PrintText<Relatorio>() {
     columText("Cod", 6) {prdno.lpad(6, "0")}
     columText("Descricao", 30) {name}
     columText("Grade", 8) {grade}
-    columNumber("Qtd", 8) {qtty}
-    columNumber("Estoque", 8) {saldoApp.toDouble()}
-    
+    columNumber("Qtd", 4) {qtty}
+    columNumber("Estoq", 5) {saldoApp.toDouble()}
+  
     columText("Forn", 6) {
       fornecedor.toString()
         .lpad(6, " ")
