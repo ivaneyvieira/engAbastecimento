@@ -1,4 +1,4 @@
-package br.com.astrosoft.separacao.view
+package br.com.astrosoft.abastecimento.view
 
 import br.com.astrosoft.framework.model.LoginInfo
 import br.com.astrosoft.framework.model.LoginInfoProvider
@@ -30,7 +30,7 @@ class SessionLoginInfoProvider: LoginInfoProvider {
 }
 
 private object SessionUitl {
-  private val ATTRIBUTE_NAME get() = "SESSION_USER${UI.getCurrent().csrfToken}"
+  private val ATTRIBUTE_NAME get() = "SESSION_ABASTECIMENTO${UI.getCurrent().csrfToken}"
   var loginInfo: LoginInfo?
     get() = VaadinSession.getCurrent().getAttribute(ATTRIBUTE_NAME) as? LoginInfo
     set(value) {

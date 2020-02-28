@@ -1,20 +1,22 @@
-package br.com.astrosoft.separacao.viewmodel
+package br.com.astrosoft.abastecimento.viewmodel
 
+import br.com.astrosoft.abastecimento.model.beans.Relatorio
+import br.com.astrosoft.framework.model.RegistryUserInfo.usuario
 import br.com.astrosoft.framework.util.format
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.mid
+import br.com.astrosoft.framework.util.rpad
 import br.com.astrosoft.framework.viewmodel.PrintText
-import br.com.astrosoft.separacao.model.beans.Relatorio
 import java.time.LocalDate
 import java.time.LocalTime
 
-class RelatorioText: PrintText<Relatorio>() {
+class RelatorioTextBema: PrintText<Relatorio>() {
   init {
     columText("Cod", 6) {prdno.lpad(6, "0")}
     columText("Descricao", 30) {name}
     columText("Grade", 8) {grade}
     columNumber("Qtd", 8) {qtty}
-    columNumber("Estoque", 8, lineBreak = true) {estoque}
+    columNumber("Estoque", 8, lineBreak = true) {saldoApp.toDouble()}
     
     columText("Forn", 6) {
       fornecedor.toString()
@@ -40,11 +42,11 @@ class RelatorioText: PrintText<Relatorio>() {
     val hora =
       LocalTime.now()
         .format()
-    return listOf("Ressuprimento Pedido $pedido $abreviacao".negrito(),
+    return listOf("Abastecimento Loja MF $pedido $abreviacao".negrito(),
                   "Data: $data      Hora $hora".negrito(),
                   "",
-                  "Pedido Loja: _________________ Separador: __________________".negrito(),
+                  "Requisitado: ${usuario?.rpad(12, " ")} Recebido: ____________________".negrito(),
                   "",
-                  "00$pedido".barras())
+                  "004$pedido".barras())
   }
 }

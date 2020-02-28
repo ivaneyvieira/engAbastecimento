@@ -1,4 +1,6 @@
-package br.com.astrosoft.separacao.model.beans
+package br.com.astrosoft.abastecimento.model.beans
+
+import br.com.astrosoft.abastecimento.model.saci
 
 data class Relatorio(
   val ordno: Int,
@@ -11,6 +13,10 @@ data class Relatorio(
   val tipo: String,
   val qtty: Double,
   val fornecedor: Int,
-  val estoque: Double,
   val embalagem: Double
-                    )
+                    ) {
+  val saldoApp
+    get() = saci.listaProduto(ordno).firstOrNull {
+      it.prdno == prdno && it.grade == grade
+    }?.saldo ?: 0
+}

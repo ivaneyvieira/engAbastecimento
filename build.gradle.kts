@@ -24,7 +24,7 @@ vaadin {
 //vaadin.submitStatistics=true
 defaultTasks("clean", "build")
 
-group = "separador"
+group = "abastecimento"
 version = "1.0"
 
 apply(plugin = "war")

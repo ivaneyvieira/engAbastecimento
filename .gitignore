@@ -19,3 +19,4 @@ Procfile
 deploy.sh
 .gradle
 ebean.properties
+.directory

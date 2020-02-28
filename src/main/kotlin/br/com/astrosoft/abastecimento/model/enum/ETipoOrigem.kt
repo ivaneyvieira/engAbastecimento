@@ -1,4 +1,4 @@
-package br.com.astrosoft.separacao.model.enum
+package br.com.astrosoft.abastecimento.model.enum
 
 enum class ETipoOrigem(val descricao: String, val sigla: String) {
   DUPLICADO("Duplicado", "D"),

@@ -1,9 +1,9 @@
 package br.com.astrosoft.framework.view
 
+import br.com.astrosoft.abastecimento.model.beans.UserSaci
+import br.com.astrosoft.abastecimento.model.saci
+import br.com.astrosoft.abastecimento.view.LoginService
 import br.com.astrosoft.framework.model.LoginInfo
-import br.com.astrosoft.separacao.model.beans.UserSaci
-import br.com.astrosoft.separacao.model.saci
-import br.com.astrosoft.separacao.view.LoginService
 import com.vaadin.flow.component.login.LoginI18n
 import com.vaadin.flow.component.login.LoginI18n.Header
 import com.vaadin.flow.component.login.LoginOverlay

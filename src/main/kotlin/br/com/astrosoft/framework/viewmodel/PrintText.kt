@@ -1,9 +1,9 @@
 package br.com.astrosoft.framework.viewmodel
 
+import br.com.astrosoft.abastecimento.model.QuerySaci
 import br.com.astrosoft.framework.util.CupsUtils
 import br.com.astrosoft.framework.util.lpad
 import br.com.astrosoft.framework.util.rpad
-import br.com.astrosoft.separacao.model.QuerySaci
 import java.io.File
 import java.text.DecimalFormat
 
@@ -72,8 +72,9 @@ abstract class PrintText<T> {
   
   private fun inicialize(text: StringBuilder) {
     text.append(0x1b.toChar())
-      .append(0x21.toChar())
-      .append(0x01.toChar())
+      .append(0x40.toChar())
+      .append(0x1b.toChar())
+      .append(0x0f.toChar())
   }
   
   protected fun String.barras(): String {
@@ -109,6 +110,7 @@ abstract class PrintText<T> {
       .append(0x0a.toChar())
       .append(0x1b.toChar())
       .append(0x69.toChar())
+      .append(0x12.toChar())
   }
   
   private fun printDetail(text: StringBuilder, bean: T) {

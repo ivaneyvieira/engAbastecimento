@@ -1,4 +1,4 @@
-package br.com.astrosoft.separacao.viewmodel
+package br.com.astrosoft.abastecimento.viewmodel
 
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
