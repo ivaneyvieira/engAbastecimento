@@ -3,6 +3,7 @@ package br.com.astrosoft.abastecimento.viewmodel
 import br.com.astrosoft.abastecimento.model.beans.Pedido
 import br.com.astrosoft.abastecimento.model.beans.Produto
 import br.com.astrosoft.abastecimento.model.beans.ProdutoPedido
+import br.com.astrosoft.abastecimento.model.beans.UserSaci
 import br.com.astrosoft.abastecimento.model.saci
 import br.com.astrosoft.framework.viewmodel.IView
 import br.com.astrosoft.framework.viewmodel.ViewModel
@@ -37,23 +38,34 @@ class EditarViewModel(view: IEditarView): ViewModel<IEditarView>(view) {
         view.showError("O status do pedido não é orçamento")
         null
       }
-      else                    -> pedido
+      else                    -> {
+        if(pedido.gravado)
+          view.showInformation("Pedido já gravado")
+        pedido
+      }
     }
   }
   
   fun gravar() = exec {
     val pedido = view.pedido ?: fail("Nenum pedido selecionado")
+    val userSaci = UserSaci.userAtual
+    if(pedido.isSaldoInssuficiente(userSaci)) fail("Existe saldo issuficiente")
     view.produtos.forEach {produto ->
-      if(produto.qtty != produto.qttyEdit)
-        if((produto.saldo - produto.qttyEdit) >= 0)
-          saci.atualizarQuantidade(pedido.ordno, produto.prdno, produto.grade, produto.qttyEdit)
+      //if(produto.qtty != produto.qttyEdit)
+      if((produto.saldo - produto.qttyEdit) >= 0)
+        saci.atualizarQuantidade(pedido.ordno, produto.prdno, produto.grade, produto.qttyEdit)
     }
     view.updateGrid()
   }
   
   fun imprimir() = exec {
     val pedido = view.pedido ?: fail("Pedido inválido")
-    RelatorioText().print("RESSUPRIMENTO", Pedido.listaRelatorio(pedido.ordno))
+    if(pedido.gravado) {
+      RelatorioText().print("RESSUPRIMENTO", Pedido.listaRelatorio(pedido.ordno))
+      view.showInformation("O pedido foi enviado para a impressora")
+    }
+    else
+      fail("O pedido não foi gravado")
   }
 }
 

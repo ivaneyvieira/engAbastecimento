@@ -2,7 +2,8 @@ package br.com.astrosoft.abastecimento.model.beans
 
 import br.com.astrosoft.abastecimento.model.saci
 
-data class Pedido(val storeno: Int, val ordno: Int, val custno: Int, val paymno: Int, val status: Int) {
+data class Pedido(val storeno: Int, val ordno: Int, val custno: Int, val paymno: Int,
+                  val status: Int, val gravado: Boolean) {
   fun produtos(user: UserSaci?) = saci
     .listaProduto(ordno)
     .filtraLocalizacoes()
@@ -26,6 +27,15 @@ data class Pedido(val storeno: Int, val ordno: Int, val custno: Int, val paymno:
       }
   }
   
+  fun isSaldoInssuficiente(user: UserSaci?): Boolean {
+    val produtos = produtos(user)
+    return if(produtos.isEmpty())
+      false
+    else {
+      produtos.any {it.saldoInsuficiente}
+    }
+  }
+  
   val isClienteValido
     get() = custno == 102773
   val isMetodoValido
@@ -42,15 +52,15 @@ data class Pedido(val storeno: Int, val ordno: Int, val custno: Int, val paymno:
     fun findProduto(prdno: String): List<Produto> {
       return saci.findProduto(prdno)
     }
-  
+    
     fun findAbreviacoes(): List<String> {
       return saci.findAbreviacoes()
     }
-  
+    
     fun removeProduto(pedido: Pedido, produto: ProdutoPedido) {
       saci.removePedido(pedido.ordno, produto.prdno, produto.grade)
     }
-  
+    
     fun listaRelatorio(ordno: Int): List<Relatorio> {
       return saci.listaRelatorio(ordno)
     }

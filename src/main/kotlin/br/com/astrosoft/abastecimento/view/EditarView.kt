@@ -7,13 +7,13 @@ import br.com.astrosoft.abastecimento.viewmodel.EditarViewModel
 import br.com.astrosoft.abastecimento.viewmodel.IEditarView
 import br.com.astrosoft.framework.view.ViewLayout
 import com.github.mvysny.karibudsl.v10.addColumnFor
-import com.github.mvysny.karibudsl.v10.br
 import com.github.mvysny.karibudsl.v10.button
 import com.github.mvysny.karibudsl.v10.getAll
 import com.github.mvysny.karibudsl.v10.getColumnBy
 import com.github.mvysny.karibudsl.v10.grid
 import com.github.mvysny.karibudsl.v10.integerField
 import com.github.mvysny.karibudsl.v10.isExpand
+import com.github.mvysny.karibudsl.v10.label
 import com.github.mvysny.karibudsl.v10.refresh
 import com.vaadin.flow.component.button.Button
 import com.vaadin.flow.component.button.ButtonVariant.LUMO_PRIMARY
@@ -24,6 +24,7 @@ import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.Grid.SelectionMode
 import com.vaadin.flow.component.grid.GridSortOrder
 import com.vaadin.flow.component.grid.GridVariant.LUMO_COMPACT
+import com.vaadin.flow.component.html.Label
 import com.vaadin.flow.component.icon.VaadinIcon.CHECK
 import com.vaadin.flow.component.icon.VaadinIcon.PRINT
 import com.vaadin.flow.component.icon.VaadinIcon.TRASH
@@ -41,6 +42,7 @@ import java.text.DecimalFormat
 @PageTitle("Editar")
 @HtmlImport("frontend://styles/shared-styles.html")
 class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
+  private lateinit var lblGravado: Label
   private var gridProduto: Grid<ProdutoPedido>
   private lateinit var edtPedido: IntegerField
   override val viewModel: EditarViewModel = EditarViewModel(this)
@@ -58,12 +60,14 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
           if(evento.isFromClient) {
             val pedido = viewModel.findPedidos(evento.value)
             if(pedido == null) value = null
-  
+      
             updateGrid(pedido)
           }
         }
       }
-      br()
+      lblGravado = label {
+        //this.horizontalAlignSelf = Alignment.END
+      }
     }
     gridProduto = grid(dataProvider = dataProviderProdutos) {
       isExpand = true
@@ -209,10 +213,15 @@ class EditarView: ViewLayout<EditarViewModel>(), IEditarView {
     val userSaci = UserSaci.userAtual
     dataProviderProdutos.items.clear()
     val user = userSaci
-    val produto =
+    val produtos =
       pedidoNovo?.produtos(user)
         .orEmpty()
-    dataProviderProdutos.items.addAll(produto)
+    dataProviderProdutos.items.addAll(produtos)
     gridProduto.refresh()
+  
+    if(pedidoNovo?.gravado == true)
+      lblGravado.text = "GRAVADO"
+    else
+      lblGravado.text = ""
   }
 }
