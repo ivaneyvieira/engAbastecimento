@@ -37,7 +37,7 @@ data class Pedido(val storeno: Int, val ordno: Int, val custno: Int, val paymno:
   }
   
   val isClienteValido
-    get() = custno == 102773
+    get() = custno in listOf(478, 21295, 21333, 102773, 108751, 120420, 709327, 901705)
   val isMetodoValido
     get() = paymno == 292
   val isStatusValido

@@ -23,11 +23,11 @@ abstract class PrintText<T> {
     return emptyList()
   }
   
-  fun columNumber(header: String, size: Int, format: String = "#,##0.##", lineBreak: Boolean = false,
+  fun columNumber(header: String, size: Int, format: String = "0", lineBreak: Boolean = false,
                   process: T.() -> Double): PrintText<T> {
     val decimalFormat = DecimalFormat(format)
     val column = Column(header, size, lineBreak, process) {number ->
-      decimalFormat.format(number)
+      decimalFormat.format(number.toInt())
         .lpad(size, " ")
     }
     columns.add(column)
@@ -72,8 +72,6 @@ abstract class PrintText<T> {
   
   private fun inicialize(text: StringBuilder) {
     text.append(0x1b.toChar())
-      .append(0x40.toChar())
-      .append(0x1b.toChar())
       .append(0x0f.toChar())
   }
   
