@@ -10,7 +10,10 @@ class UserSaci {
   var storeno: Int? = 0
   var login: String? = ""
   var senha: String? = ""
+  val prntno : Int = 0
+  val impressora : String = ""
   private var bitAcesso: Int? = 0
+  
   //Otiros campos
   var ativo: Boolean = true
 

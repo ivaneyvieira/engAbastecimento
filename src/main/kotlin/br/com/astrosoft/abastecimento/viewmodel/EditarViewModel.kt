@@ -19,7 +19,7 @@ class EditarViewModel(view: IEditarView): ViewModel<IEditarView>(view) {
     val pedido = view.pedido ?: fail("Nenum pedido selecionado")
     produto ?: fail("Produto não selecionado")
     Pedido.removeProduto(pedido, produto)
-  
+    
     view.updateGrid()
   }
   
@@ -59,9 +59,10 @@ class EditarViewModel(view: IEditarView): ViewModel<IEditarView>(view) {
   }
   
   fun imprimir() = exec {
+    val impressora = UserSaci.userAtual?.impressora ?: "ABASTECIMENTO"
     val pedido = view.pedido ?: fail("Pedido inválido")
     if(pedido.gravado) {
-      RelatorioTextEpson().print("ABASTECIMENTO", Pedido.listaRelatorio(pedido.ordno))
+      RelatorioTextEpson().print(impressora, Pedido.listaRelatorio(pedido.ordno))
       view.showInformation("O pedido foi enviado para a impressora")
     }
     else
