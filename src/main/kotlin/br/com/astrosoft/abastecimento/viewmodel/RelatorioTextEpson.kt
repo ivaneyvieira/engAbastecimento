@@ -15,16 +15,11 @@ class RelatorioTextEpson: PrintText<Relatorio>() {
     columText("Cod", 6) {prdno.lpad(6, "0")}
     columText("Descricao", 30) {name}
     columText("Grade", 8) {grade}
-    /*
-      columText("Forn", 6) {
-        fornecedor.toString()
-          .lpad(6, " ")
-      }
-     */
     columText("Local", 19) {localizacao}
     columText("Referencia", 27) {mfno_ref}
-    columNumber("Qtd", 8) {qtty}
-    columNumber("Estoq", 8) {saldoApp.toDouble()}
+    columNumber("Emb", 5) {embalagem}
+    columNumber("Quantidade", 10) {qtty}
+    columNumber("Estoque", 10) {saldoApp.toDouble()}
   }
   
   override fun sumaryLine(): List<String> {
