@@ -1,15 +1,15 @@
 version: "3"
 services:
   engecopi:
-    image: tomcat:8
+    image: tomcat:8-slim
     container_name: eng_abastecimento
     ports:
-      - "8096:8080"
+      - "8024:8080"
     environment:
       TZ: "America/Fortaleza"
       EBEAN_PROPS: /etc/ebean.properties
     volumes:
-      - ./build/libs/engAbastecimento-1.0.war:/usr/local/tomcat/webapps/engAbastecimento.war
+      - ./build/libs/producao-1.0.war:/usr/local/tomcat/webapps/engAbastecimento.war
       - ./ebean.properties:/etc/ebean.properties
     restart: always
     networks:
