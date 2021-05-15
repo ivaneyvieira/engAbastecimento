@@ -23,7 +23,7 @@ open class QueryDB(driver: String, url: String, username: String, password: Stri
     val ds = HikariDataSource(config)
     ds.maximumPoolSize = 5
   
-    this.sql2o = Sql2o(url, username, password)
+    this.sql2o = Sql2o(ds)
   }
   
   private fun registerDriver(driver: String) {
